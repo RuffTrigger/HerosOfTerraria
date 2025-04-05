@@ -30,7 +30,6 @@ namespace HerosOfTerraria
         public static int fireworkcolor = rnd.Next(1, 3);
         private static readonly Random getrandom = new Random();
         private static readonly object syncLock = new object();
-        public static IDbConnection db;
         public static List<Player> players = new List<Player>();
         public override string Name { get { return "" + "Heros Of Terraria" + ""; } }
         public override string Author { get { return "Ruff Trigger"; } }
@@ -82,3067 +81,147 @@ namespace HerosOfTerraria
         }
         private static void OnGreet(GreetPlayerEventArgs args)
         {
-            if (args == null || TShock.Players[args.Who].Account == null || TShock.Players[args.Who].TPlayer == null || TShock.Players[args.Who].IsLoggedIn == false || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == null || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == "")
+            TSPlayer player = TShock.Players[args.Who];
+            if (player == null || !player.IsLoggedIn || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == "")
             {
                 return;
             }
-            try
+            else
             {
-                if (!Directory.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID))
+                try
                 {
-                    Directory.CreateDirectory(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID);
+                    if (!Directory.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID))
+                    {
+                        Directory.CreateDirectory(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID);
 
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroClass.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass", "0");
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroClass.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroLevel.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroExperience.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroExperience", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroExpMultiplier.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroExpMultiplier", "1");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroNextLevel.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroNextLevel", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroMaxLevel.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroMaxLevel", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroAttackSkill.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroAttackSkill", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroAttackBuff.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroAttackBuff", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDebuffs.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDebuffs", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroSkillpoints.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroSkillpoints", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDefence.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDefence", "0");
+                        }
+                        if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDamage.hotfile"))
+                        {
+                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDamage", "0");
+                        }
                     }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroLevel.hotfile"))
+                    if (ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") != "0")
                     {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroExperience.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroExperience", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroExpMultiplier.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroExpMultiplier", "1");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroNextLevel.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroNextLevel", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroMaxLevel.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroMaxLevel", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroAttackSkill.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroAttackSkill", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroAttackBuff.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroAttackBuff", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDebuffs.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDebuffs", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroSkillpoints.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroSkillpoints", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDefence.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDefence", "0");
-                    }
-                    if (!File.Exists(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID + "/" + "HeroDamage.hotfile"))
-                    {
-                        WriteFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroDamage", "0");
+                        TSPlayer.All.SendMessage(TShock.Players[args.Who].Account.Name
+                                    + " The Level "
+                                    + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel")
+                                    + " "
+                                    + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass")
+                                    + " Has Joined The Game! ", 121, 31, 52);
+                        return;
                     }
                 }
-                if (ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") != "0")
+                catch (Exception ex)
                 {
-                    TSPlayer.All.SendMessage(TShock.Players[args.Who].Account.Name
-                                + " The Level "
-                                + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel")
-                                + " "
-                                + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass")
-                                + " Has Joined The Game! ", 121, 31, 52);
-                    return;
+                    TShock.Log.Error(ex.ToString());
+                    Console.Write(ex.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                TShock.Log.Error(ex.ToString());
-                Console.Write(ex.ToString());
-            }
+
 
         }
         private void OnLeave(LeaveEventArgs args)
         {
-            if (args == null || TShock.Players[args.Who].IsLoggedIn == false || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == null || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == "")
+            TSPlayer player = TShock.Players[args.Who];
+            if (player == null || !player.IsLoggedIn || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass") == "")
             {
                 return;
             }
-            TSPlayer.All.SendMessage(TShock.Players[args.Who].Account.Name
-                                        + " The Level "
-                                        + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel")
-                                        + " "
-                                        + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass")
-                                        + " Has left our worlde...", 121, 31, 52);
+            else
+            {
+                TSPlayer.All.SendMessage(TShock.Players[args.Who].Account.Name
+                                            + " The Level "
+                                            + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroLevel")
+                                            + " "
+                                            + ReadFile(PlayerFilePath + "/" + TShock.Players[args.Who].Account.ID, "HeroClass")
+                                            + " Has left our worlde...", 121, 31, 52);
+            }
         }
         private static void OnGetData(GetDataEventArgs args)
         {
-            if (args == null || TShock.Players[args.Msg.whoAmI].Account == null || TShock.Players[args.Msg.whoAmI].TPlayer == null || TShock.Players[args.Msg.whoAmI].IsLoggedIn == false || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroClass") == null || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroClass") == "")
+            TSPlayer player = TShock.Players[args.Msg.whoAmI];
+            if (player == null || !player.IsLoggedIn || ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroClass") == "")
             {
                 return;
             }
-            try
+            else
             {
-                using (var reader = new BinaryReader(new MemoryStream(args.Msg.readBuffer, args.Index, args.Length)))
+                try
                 {
-                    Player player = players.Where(p => p.Equals(args.MsgID)).FirstOrDefault();
-                    switch (args.MsgID)
+                    using (var reader = new BinaryReader(new MemoryStream(args.Msg.readBuffer, args.Index, args.Length)))
                     {
-                        case PacketTypes.NpcStrike:
-                            Int16 npcID = reader.ReadInt16();
-                            Int16 dmg = reader.ReadInt16();
-                            float knockback = reader.ReadSingle();
-                            byte direction = reader.ReadByte();
-                            bool critical = reader.ReadBoolean();
-                            //bool secondCrit = random.Next(1, 101) <= Player.Crit;
-                            NPC npc = Main.npc[npcID];
-                            PlayerHero.HeroClass = ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroClass").Trim();
-                            PlayerHero.HeroLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroLevel").Trim());
-                            PlayerHero.HeroNextLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroNextLevel").Trim());
-                            PlayerHero.HeroExperience = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience").Trim());
-                            PlayerHero.HeroExpMultiplier = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExpMultiplier").Trim());
-                            PlayerHero.HeroMaxLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroMaxLevel").Trim());
-                            if (PlayerHero.HeroLevel == PlayerHero.HeroMaxLevel)
-                            {
-                                return;
-                            }
-                            if (npc.life - dmg <= 0)
-                            {
+                        //Player player = players.Where(p => p.Equals(args.MsgID)).FirstOrDefault();
+                        switch (args.MsgID)
+                        {
+                            case PacketTypes.NpcStrike:
+                                Int16 npcID = reader.ReadInt16();
+                                Int16 dmg = reader.ReadInt16();
+                                float knockback = reader.ReadSingle();
+                                byte direction = reader.ReadByte();
+                                bool critical = reader.ReadBoolean();
+                                //bool secondCrit = random.Next(1, 101) <= Player.Crit;
+                                NPC npc = Main.npc[npcID];
+                                PlayerHero.HeroClass = ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroClass").Trim();
+                                PlayerHero.HeroLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroLevel").Trim());
+                                PlayerHero.HeroNextLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroNextLevel").Trim());
+                                PlayerHero.HeroExperience = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience").Trim());
+                                PlayerHero.HeroExpMultiplier = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExpMultiplier").Trim());
+                                PlayerHero.HeroMaxLevel = Convert.ToInt32(ReadFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroMaxLevel").Trim());
+                                if (PlayerHero.HeroLevel == PlayerHero.HeroMaxLevel)
+                                {
+                                    return;
+                                }
+                                if (npc.life - dmg <= 0)
+                                {
 
-                                if (npc.netID == NPCID.KingSlime || npc.netID == NPCID.QueenBee || npc.netID == NPCID.EyeofCthulhu || npc.netID == NPCID.EaterofWorldsHead || npc.netID == NPCID.EaterofWorldsBody || npc.netID == NPCID.EaterofWorldsTail || npc.netID == NPCID.SkeletronHead || npc.netID == NPCID.SkeletronHand || npc.netID == NPCID.BrainofCthulhu)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 20000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
+                                    if (npc.netID == NPCID.KingSlime || npc.netID == NPCID.QueenBee || npc.netID == NPCID.EyeofCthulhu || npc.netID == NPCID.EaterofWorldsHead || npc.netID == NPCID.EaterofWorldsBody || npc.netID == NPCID.EaterofWorldsTail || npc.netID == NPCID.SkeletronHead || npc.netID == NPCID.SkeletronHand || npc.netID == NPCID.BrainofCthulhu)
                                     {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.WallofFlesh || npc.netID == NPCID.WallofFleshEye)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 30000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.Retinazer || npc.netID == NPCID.Spazmatism || npc.netID == NPCID.SkeletronPrime)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 45000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.PrimeCannon || npc.netID == NPCID.PrimeSaw || npc.netID == NPCID.PrimeVice || npc.netID == NPCID.PrimeLaser)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 50000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.TheDestroyer || npc.netID == NPCID.TheDestroyerBody || npc.netID == NPCID.TheDestroyerTail || npc.netID == NPCID.Golem || npc.netID == NPCID.GolemHead || npc.netID == NPCID.GolemFistLeft || npc.netID == NPCID.GolemFistRight || npc.netID == NPCID.GolemHeadFree || npc.netID == NPCID.Plantera || npc.netID == NPCID.PlanterasHook || npc.netID == NPCID.PlanterasTentacle)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 65000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.MourningWood || npc.netID == NPCID.Pumpking || npc.netID == NPCID.PumpkingBlade || npc.netID == NPCID.Everscream || npc.netID == NPCID.IceQueen || npc.netID == NPCID.SantaNK1)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 75000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else if (npc.netID == NPCID.MartianSaucer || npc.netID == NPCID.MoonLordHead || npc.netID == NPCID.MoonLordHand || npc.netID == NPCID.MoonLordCore || npc.netID == NPCID.LunarTowerVortex || npc.netID == NPCID.CultistBoss || npc.netID == NPCID.LunarTowerStardust || npc.netID == NPCID.LunarTowerNebula || npc.netID == NPCID.LunarTowerSolar)
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = (npc.lifeMax + 100000) * PlayerHero.HeroExpMultiplier;
-                                    switch (PlayerHero.HeroLevel)
-                                    {
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                        case 4:
-                                        case 5:
-                                        case 6:
-                                        case 7:
-                                        case 8:
-                                        case 9:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 10:
-                                        case 11:
-                                        case 12:
-                                        case 13:
-                                        case 14:
-                                        case 15:
-                                        case 16:
-                                        case 17:
-                                        case 18:
-                                        case 19:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp / 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 20:
-                                        case 21:
-                                        case 22:
-                                        case 23:
-                                        case 24:
-                                        case 25:
-                                        case 26:
-                                        case 27:
-                                        case 28:
-                                        case 29:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 30:
-                                        case 31:
-                                        case 32:
-                                        case 33:
-                                        case 34:
-                                        case 35:
-                                        case 36:
-                                        case 37:
-                                        case 38:
-                                        case 39:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 40:
-                                        case 41:
-                                        case 42:
-                                        case 43:
-                                        case 44:
-                                        case 45:
-                                        case 46:
-                                        case 47:
-                                        case 48:
-                                        case 49:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp + PlayerHero.HeroLevel * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 50:
-                                        case 51:
-                                        case 52:
-                                        case 53:
-                                        case 54:
-                                        case 55:
-                                        case 56:
-                                        case 57:
-                                        case 58:
-                                        case 59:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 60:
-                                        case 61:
-                                        case 62:
-                                        case 63:
-                                        case 64:
-                                        case 65:
-                                        case 66:
-                                        case 67:
-                                        case 68:
-                                        case 69:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 70:
-                                        case 71:
-                                        case 72:
-                                        case 73:
-                                        case 74:
-                                        case 75:
-                                        case 76:
-                                        case 77:
-                                        case 78:
-                                        case 79:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 80:
-                                        case 81:
-                                        case 82:
-                                        case 83:
-                                        case 84:
-                                        case 85:
-                                        case 86:
-                                        case 87:
-                                        case 88:
-                                        case 89:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 2;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        case 90:
-                                        case 91:
-                                        case 92:
-                                        case 93:
-                                        case 94:
-                                        case 95:
-                                        case 96:
-                                        case 97:
-                                        case 98:
-                                        case 99:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 3;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                        default:
-                                            #region Exp And Level Handler
-                                            GainedXP = MobExp * 4;
-                                            if (GainedXP < 0)
-                                            {
-                                                GainedXP = 0;
-                                            }
-                                            if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
-                                            {
-                                                LevelUp(TShock.Players[args.Msg.whoAmI]);
-                                                return;
-                                            }
-                                            WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
-                                            c.R = SetMsgColor();
-                                            c.B = SetMsgColor();
-                                            c.G = SetMsgColor();
-                                            NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
-                                                + PlayerHero.HeroClass
-                                                + " " + "LvL" + " " + PlayerHero.HeroLevel
-                                                + "]"
-                                                + "("
-                                                + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
-                                                + "%)"
-                                                + "["
-                                                + GainedXP
-                                                + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
-                                                + 32, 0, 0, 0, 0);
-                                            #endregion
-                                            break;
-                                    }
-                                    return;
-                                }
-                                else
-                                {
-                                    int GainedXP = 0;
-                                    int MobExp = 0;
-                                    MobExp = npc.lifeMax * PlayerHero.HeroExpMultiplier;
-                                    if (MobExp < 0)
-                                    {
-                                        return;
-                                    }
-                                    else
-                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 20000) * PlayerHero.HeroExpMultiplier;
                                         switch (PlayerHero.HeroLevel)
                                         {
                                             case 1:
@@ -3556,25 +635,2959 @@ namespace HerosOfTerraria
                                         }
                                         return;
                                     }
+                                    else if (npc.netID == NPCID.WallofFlesh || npc.netID == NPCID.WallofFleshEye)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 30000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else if (npc.netID == NPCID.Retinazer || npc.netID == NPCID.Spazmatism || npc.netID == NPCID.SkeletronPrime)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 45000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else if (npc.netID == NPCID.PrimeCannon || npc.netID == NPCID.PrimeSaw || npc.netID == NPCID.PrimeVice || npc.netID == NPCID.PrimeLaser)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 50000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else if (npc.netID == NPCID.TheDestroyer || npc.netID == NPCID.TheDestroyerBody || npc.netID == NPCID.TheDestroyerTail || npc.netID == NPCID.Golem || npc.netID == NPCID.GolemHead || npc.netID == NPCID.GolemFistLeft || npc.netID == NPCID.GolemFistRight || npc.netID == NPCID.GolemHeadFree || npc.netID == NPCID.Plantera || npc.netID == NPCID.PlanterasHook || npc.netID == NPCID.PlanterasTentacle)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 65000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else if (npc.netID == NPCID.MourningWood || npc.netID == NPCID.Pumpking || npc.netID == NPCID.PumpkingBlade || npc.netID == NPCID.Everscream || npc.netID == NPCID.IceQueen || npc.netID == NPCID.SantaNK1)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 75000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else if (npc.netID == NPCID.MartianSaucer || npc.netID == NPCID.MoonLordHead || npc.netID == NPCID.MoonLordHand || npc.netID == NPCID.MoonLordCore || npc.netID == NPCID.LunarTowerVortex || npc.netID == NPCID.CultistBoss || npc.netID == NPCID.LunarTowerStardust || npc.netID == NPCID.LunarTowerNebula || npc.netID == NPCID.LunarTowerSolar)
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = (npc.lifeMax + 100000) * PlayerHero.HeroExpMultiplier;
+                                        switch (PlayerHero.HeroLevel)
+                                        {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                            case 7:
+                                            case 8:
+                                            case 9:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 10:
+                                            case 11:
+                                            case 12:
+                                            case 13:
+                                            case 14:
+                                            case 15:
+                                            case 16:
+                                            case 17:
+                                            case 18:
+                                            case 19:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp / 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 20:
+                                            case 21:
+                                            case 22:
+                                            case 23:
+                                            case 24:
+                                            case 25:
+                                            case 26:
+                                            case 27:
+                                            case 28:
+                                            case 29:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 30:
+                                            case 31:
+                                            case 32:
+                                            case 33:
+                                            case 34:
+                                            case 35:
+                                            case 36:
+                                            case 37:
+                                            case 38:
+                                            case 39:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 40:
+                                            case 41:
+                                            case 42:
+                                            case 43:
+                                            case 44:
+                                            case 45:
+                                            case 46:
+                                            case 47:
+                                            case 48:
+                                            case 49:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 50:
+                                            case 51:
+                                            case 52:
+                                            case 53:
+                                            case 54:
+                                            case 55:
+                                            case 56:
+                                            case 57:
+                                            case 58:
+                                            case 59:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 60:
+                                            case 61:
+                                            case 62:
+                                            case 63:
+                                            case 64:
+                                            case 65:
+                                            case 66:
+                                            case 67:
+                                            case 68:
+                                            case 69:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 70:
+                                            case 71:
+                                            case 72:
+                                            case 73:
+                                            case 74:
+                                            case 75:
+                                            case 76:
+                                            case 77:
+                                            case 78:
+                                            case 79:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 80:
+                                            case 81:
+                                            case 82:
+                                            case 83:
+                                            case 84:
+                                            case 85:
+                                            case 86:
+                                            case 87:
+                                            case 88:
+                                            case 89:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 2;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            case 90:
+                                            case 91:
+                                            case 92:
+                                            case 93:
+                                            case 94:
+                                            case 95:
+                                            case 96:
+                                            case 97:
+                                            case 98:
+                                            case 99:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 3;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                            default:
+                                                #region Exp And Level Handler
+                                                GainedXP = MobExp * 4;
+                                                if (GainedXP < 0)
+                                                {
+                                                    GainedXP = 0;
+                                                }
+                                                if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                {
+                                                    LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                    return;
+                                                }
+                                                WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                c.R = SetMsgColor();
+                                                c.B = SetMsgColor();
+                                                c.G = SetMsgColor();
+                                                NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                    + PlayerHero.HeroClass
+                                                    + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                    + "]"
+                                                    + "("
+                                                    + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                    + "%)"
+                                                    + "["
+                                                    + GainedXP
+                                                    + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                    + 32, 0, 0, 0, 0);
+                                                #endregion
+                                                break;
+                                        }
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        int GainedXP = 0;
+                                        int MobExp = 0;
+                                        MobExp = npc.lifeMax * PlayerHero.HeroExpMultiplier;
+                                        if (MobExp < 0)
+                                        {
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            switch (PlayerHero.HeroLevel)
+                                            {
+                                                case 1:
+                                                case 2:
+                                                case 3:
+                                                case 4:
+                                                case 5:
+                                                case 6:
+                                                case 7:
+                                                case 8:
+                                                case 9:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 10:
+                                                case 11:
+                                                case 12:
+                                                case 13:
+                                                case 14:
+                                                case 15:
+                                                case 16:
+                                                case 17:
+                                                case 18:
+                                                case 19:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp / 2;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 20:
+                                                case 21:
+                                                case 22:
+                                                case 23:
+                                                case 24:
+                                                case 25:
+                                                case 26:
+                                                case 27:
+                                                case 28:
+                                                case 29:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 30:
+                                                case 31:
+                                                case 32:
+                                                case 33:
+                                                case 34:
+                                                case 35:
+                                                case 36:
+                                                case 37:
+                                                case 38:
+                                                case 39:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp + PlayerHero.HeroLevel;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 40:
+                                                case 41:
+                                                case 42:
+                                                case 43:
+                                                case 44:
+                                                case 45:
+                                                case 46:
+                                                case 47:
+                                                case 48:
+                                                case 49:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp + PlayerHero.HeroLevel * 2;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 50:
+                                                case 51:
+                                                case 52:
+                                                case 53:
+                                                case 54:
+                                                case 55:
+                                                case 56:
+                                                case 57:
+                                                case 58:
+                                                case 59:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 60:
+                                                case 61:
+                                                case 62:
+                                                case 63:
+                                                case 64:
+                                                case 65:
+                                                case 66:
+                                                case 67:
+                                                case 68:
+                                                case 69:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp * 2;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 70:
+                                                case 71:
+                                                case 72:
+                                                case 73:
+                                                case 74:
+                                                case 75:
+                                                case 76:
+                                                case 77:
+                                                case 78:
+                                                case 79:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp * 2 + PlayerHero.HeroLevel;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 80:
+                                                case 81:
+                                                case 82:
+                                                case 83:
+                                                case 84:
+                                                case 85:
+                                                case 86:
+                                                case 87:
+                                                case 88:
+                                                case 89:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp * 2;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                case 90:
+                                                case 91:
+                                                case 92:
+                                                case 93:
+                                                case 94:
+                                                case 95:
+                                                case 96:
+                                                case 97:
+                                                case 98:
+                                                case 99:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp * 3;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                                default:
+                                                    #region Exp And Level Handler
+                                                    GainedXP = MobExp * 4;
+                                                    if (GainedXP < 0)
+                                                    {
+                                                        GainedXP = 0;
+                                                    }
+                                                    if (PlayerHero.HeroLevel < PlayerHero.HeroMaxLevel && PlayerHero.HeroExperience >= PlayerHero.HeroNextLevel)
+                                                    {
+                                                        LevelUp(TShock.Players[args.Msg.whoAmI]);
+                                                        return;
+                                                    }
+                                                    WriteFile(PlayerFilePath + "/" + TShock.Players[args.Msg.whoAmI].Account.ID, "HeroExperience", Convert.ToString(PlayerHero.HeroExperience += GainedXP));
+                                                    c.R = SetMsgColor();
+                                                    c.B = SetMsgColor();
+                                                    c.G = SetMsgColor();
+                                                    NetMessage.SendData((int)119, -1, -1, Terraria.Localization.NetworkText.FromLiteral("["
+                                                        + PlayerHero.HeroClass
+                                                        + " " + "LvL" + " " + PlayerHero.HeroLevel
+                                                        + "]"
+                                                        + "("
+                                                        + ((Convert.ToInt32(PlayerHero.HeroExperience += GainedXP) * 100) / Convert.ToInt32(PlayerHero.HeroNextLevel))
+                                                        + "%)"
+                                                        + "["
+                                                        + GainedXP
+                                                        + "xp!]"), (int)c.PackedValue, TShock.Players[args.Msg.whoAmI].TPlayer.position.X, TShock.Players[args.Msg.whoAmI].TPlayer.position.Y
+                                                        + 32, 0, 0, 0, 0);
+                                                    #endregion
+                                                    break;
+                                            }
+                                            return;
+                                        }
+                                    }
                                 }
-                            }
-                            break;
+                                break;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    TShock.Log.Error(ex.ToString());
+                    Console.Write(ex.ToString());
+                    return;
+                }
             }
-            catch (Exception ex)
-            {
-                TShock.Log.Error(ex.ToString());
-                Console.Write(ex.ToString());
-                return;
-            }
+                
 
         }
         private void GameFilesCheck(object sender, ElapsedEventArgs args)
         {
             for (int i = 0; i < TShock.Players.Length; i++)
             {
-                if (TShock.Players[i].Account == null || TShock.Players[i].TPlayer == null || TShock.Players[i].IsLoggedIn == false)
+                if (TShock.Players[i].Account == null || TShock.Players[i].TPlayer == null || !TShock.Players[i].IsLoggedIn)
                 {
                     return;
                 }
@@ -3637,7 +3650,7 @@ namespace HerosOfTerraria
         }
         private static void HeroClassSetup()
         {
-            if (!File.Exists(HerosFilesPath + "/" + Heros.Class1.ClassName +  ".json"))
+            if (!File.Exists(HerosFilesPath + "/" + Heros.Class1.ClassName + ".json"))
             {
                 CreateJsonFile(HerosFilesPath, Heros.Class1.ClassName, Heros.Class1);
             }
@@ -3820,7 +3833,7 @@ namespace HerosOfTerraria
                     }
                     #endregion
                     LevelUpPlayer.SendMessage(
-                        string.Format("You just turned level {0} +1 skillpoint gained - exp until levelup = {1}",
+                        string.Format("You just turned level {0} +1 skillpoint gained - exp until level up = {1}",
                         PlayerHero.HeroLevel,
                         PlayerHero.HeroNextLevel), Color.LightGreen);
                     TSPlayer.All.SendMessage(LevelUpPlayer.Account.Name
@@ -3843,13 +3856,16 @@ namespace HerosOfTerraria
         {
             try
             {
-                using (var reader = db.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", HealThisPlayer))
+                using (var reader = TShock.DB.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", HealThisPlayer))
                 {
                     if (reader.Read())
                     {
-                        int maxhp;
-                        maxhp = Convert.ToInt32(reader.Get<string>("MaxHealth"));
-                        HealThisPlayer.Heal(Convert.ToInt32(maxhp));
+                        int maxHP;
+                        int maxMP;
+                        maxHP = Convert.ToInt32(reader.Get<string>("MaxHealth"));
+                        maxMP = Convert.ToInt32(reader.Get<string>("MaxMana"));
+                        HealThisPlayer.Heal(Convert.ToInt32(maxHP));
+                        HealThisPlayer.PlayerData.mana = maxMP;
                     }
                 }
             }

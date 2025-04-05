@@ -8,7 +8,7 @@ namespace HerosOfTerraria
         public static readonly string classinfo = "HerosOfTerraria.classinfo";
         [Description("Allows the players to pick a Class.")]
         public static readonly string pickclass = "HerosOfTerraria.pickclass";
-        [Description("Allow players to change there Class.")]
+        [Description("Allows players to change there Class.")]
         public static readonly string changeclass = "HerosOfTerraria.changeclass";
         [Description("Allows the players to gain exp and check level and exp status")]
         public static readonly string showexpandlevelinfo = "HerosOfTerraria.exp";

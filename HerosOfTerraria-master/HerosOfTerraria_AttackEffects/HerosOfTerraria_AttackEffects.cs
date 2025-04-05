@@ -159,7 +159,13 @@ namespace HerosOfTerraria_AttackEffects
                 // Adjust the projectile's speed if needed (e.g., multiply the direction vector by a speed factor)
                 float projectileSpeed = 10f; // Example speed
                 Vector2 velocity = directionToNpc * projectileSpeed;
-
+                int Bee = 181;
+                int GiantBee = 566;
+                if (type == Bee && ShouldSpawnProjectiles())
+                {
+                    // Spawn Giant Bee projectile
+                    Projectile.NewProjectile(source, spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, GiantBee, playerId, 0f);
+                }
                 // Spawn the projectile
                 Projectile.NewProjectile(source, spawnPosition.X, spawnPosition.Y, velocity.X, velocity.Y, type, playerId, 0f);
             }

@@ -286,7 +286,7 @@ namespace HerosOfTerraria
                     #region Changing Class
                     if (HerosOfTerraria.ReadFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass").ToString() == Heros.Class1.ClassName && args.Parameters[0].ToString() != "1")
                     {
-                        using (var reader_HP_MP = HerosOfTerraria.db.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
+                        using (var reader_HP_MP = TShock.DB.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
                         {
                             if (reader_HP_MP.Read())
                             {
@@ -312,6 +312,7 @@ namespace HerosOfTerraria
                                 case "2":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class2.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class2 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class2.ClassName);
@@ -319,12 +320,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class2.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class2.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class2.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "3":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class3.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class3 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class3.ClassName);
@@ -332,12 +334,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class3.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class3.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class3.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "4":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class4.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class4 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class4.ClassName);
@@ -345,7 +348,7 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class4.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class4.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class4.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                             }
@@ -354,7 +357,7 @@ namespace HerosOfTerraria
                     }
                     if (HerosOfTerraria.ReadFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass").ToString() == Heros.Class2.ClassName && args.Parameters[0].ToString() != "2")
                     {
-                        using (var reader_HP_MP = HerosOfTerraria.db.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
+                        using (var reader_HP_MP = TShock.DB.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
                         {
                             if (reader_HP_MP.Read())
                             {
@@ -380,6 +383,7 @@ namespace HerosOfTerraria
                                 case "1":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class1.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class1 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class1.ClassName);
@@ -387,12 +391,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class1.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class1.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class1.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "3":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class3.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class3 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class3.ClassName);
@@ -400,12 +405,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class3.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class3.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class3.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "4":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class4.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class4 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class4.ClassName);
@@ -413,7 +419,7 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class4.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class4.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class4.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                             }
@@ -422,7 +428,7 @@ namespace HerosOfTerraria
                     }
                     if (HerosOfTerraria.ReadFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass").ToString() == Heros.Class3.ClassName && args.Parameters[0].ToString() != "3")
                     {
-                        using (var reader_HP_MP = HerosOfTerraria.db.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
+                        using (var reader_HP_MP = TShock.DB.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
                         {
                             if (reader_HP_MP.Read())
                             {
@@ -448,6 +454,7 @@ namespace HerosOfTerraria
                                 case "1":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class1.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class1 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class1.ClassName);
@@ -455,12 +462,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class1.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class1.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class1.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "2":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class3.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class2 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class2.ClassName);
@@ -468,12 +476,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class2.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class2.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class2.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "4":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class4.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class4 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class4.ClassName);
@@ -481,7 +490,7 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class4.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class4.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class4.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                             }
@@ -490,7 +499,7 @@ namespace HerosOfTerraria
                     }
                     if (HerosOfTerraria.ReadFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass").ToString() == Heros.Class4.ClassName && args.Parameters[0].ToString() != "4")
                     {
-                        using (var reader_HP_MP = HerosOfTerraria.db.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
+                        using (var reader_HP_MP = TShock.DB.QueryReader("SELECT * FROM tsCharacter WHERE Account=@0", args.Player.Account.ID))
                         {
                             if (reader_HP_MP.Read())
                             {
@@ -516,6 +525,7 @@ namespace HerosOfTerraria
                                 case "1":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class1.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class1 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class1.ClassName);
@@ -523,12 +533,13 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class1.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class1.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class1.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "2":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class3.ClassName + ".json"))
                                     {
+                                        args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class2 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class2.ClassName);
@@ -536,12 +547,12 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class2.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class2.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class2.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                                 case "3":
                                     using (StreamReader file = File.OpenText(HerosOfTerraria.HerosFilesPath + "/" + Heros.Class3.ClassName + ".json"))
-                                    {
+                                    {args.Player.SaveServerCharacter();
                                         JsonSerializer serializer = new JsonSerializer();
                                         Heros Class3 = (Heros)serializer.Deserialize(file, typeof(Heros));
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroClass", Class3.ClassName);
@@ -549,7 +560,7 @@ namespace HerosOfTerraria
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroAttackBuff", Class3.AttackBuff.ToString());
                                         HerosOfTerraria.WriteFile(HerosOfTerraria.PlayerFilePath + "/" + args.Player.Account.ID, "HeroDebuffs", Class3.Debuffs.ToString());
                                         args.Player.Kick("You Change Hero Class Too = " + Class3.ClassName.ToString() + " " + "REJOIN!", true, true, null, false);
-                                        HerosOfTerraria.db.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
+                                        TShock.DB.Query("UPDATE tsCharacter SET Health=@0, MaxHealth=@1, Mana=@2, MaxMana=@3 WHERE Account=@4;", DefaultHP, DefaultMAXHP, DefaultMP, DefaultMAXMP, args.Player.Account.ID);
                                     }
                                     break;
                             }

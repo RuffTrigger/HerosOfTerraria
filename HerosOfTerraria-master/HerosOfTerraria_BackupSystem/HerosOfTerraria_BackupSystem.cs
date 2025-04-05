@@ -204,7 +204,7 @@ namespace HerosOfTerraria_BackupSystem
                 string zipPath = BackupFilePath + "/";
                 string zipName = "backup" + "_" + "[Time]" + "_" + Hour + @"-" + Minute + "_" + "[Date]" + "_" + Day + "_" + Month + "_" + "[Year]" + "_" + Year + ".zip";
                 int fileCount = Directory.GetFiles(zipPath, "*.zip", SearchOption.AllDirectories).Length; // Will Retrieve count of files zip extension in directry and sub directries
-                if (fileCount >= 100)
+                if (fileCount >= 5)
                 {
                     DirectoryInfo di = new DirectoryInfo(zipPath);
                     foreach (FileInfo file in di.GetFiles())
